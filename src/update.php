@@ -1,0 +1,82 @@
+<?php 
+
+	include_once 'database.php';
+
+	if ( isset( $_POST['name']) && isset( $_POST['id'] )  ) {
+
+		$name = trim( $_POST['name'] );
+		$id = $_POST['id'];
+
+		try{
+
+			$updateQuery = "UPDATE tasks SET name = :name WHERE ID = :id";
+
+			$statement = $conn->prepare( $updateQuery );
+			$statement->execute( array( ":name" => $name, ":id" => $id ) );
+
+			if ( $statement ) {
+
+				echo "Task name update successfully";
+
+			}
+
+		}catch ( PDOException $ex ){
+
+			echo "An error occurred" .$ex->getMessage();
+
+		}
+
+	}
+	else if ( isset( $_POST['description']) && isset( $_POST['id'] ) ) {
+
+		$description = trim( $_POST['description'] );
+		$id = $_POST['id'];
+
+		try{
+
+			$updateQuery = "UPDATE tasks SET description = :description WHERE ID = :id";
+
+			$statement = $conn->prepare( $updateQuery );
+			$statement->execute( array( ":description" => $description, ":id" => $id ) );
+
+			if ( $statement ) {
+
+				echo "Task description update successfully";
+
+			}
+
+		}catch ( PDOException $ex ) {
+
+			echo "An error occurred" .$ex->getMessage();
+
+		}
+
+	}
+	else if ( isset( $_POST['status'] ) && isset( $_POST['id'] ) ) {
+
+		$status = trim( $_POST['status'] );
+		$id = $_POST['id'];
+
+		try{
+
+			$updateQuery = "UPDATE tasks SET status = :status WHERE ID = :id";
+
+			$statement = $conn->prepare( $updateQuery );
+			$statement->execute( array( ":status" => $status, ":id" => $id ) );
+
+			if ( $statement ) {
+
+				echo "Task status update successfully";
+
+			}
+
+
+		}catch ( PDOException $ex ) {
+
+			echo "An error occurred" .$ex->getMessage();
+
+		}
+
+	}
+
+?>
