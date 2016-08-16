@@ -13,7 +13,7 @@ $(document).ready(function () {
 			method: 'POST',
 			data: formData,
 			success: function (data) {
-				
+
 				$('#ajax_msg').css("display", "block").delay(3000).slideUp(300).html(data);
 				document.getElementById("create-task").reset();
 
@@ -22,5 +22,7 @@ $(document).ready(function () {
 		});
 
 	});
+
+	$('#task-list').load('read.php');
 
 });
