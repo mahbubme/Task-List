@@ -14,7 +14,7 @@ $table = "CREATE TABLE IF NOT EXISTS tasks
 try{
 
 	$conn->query($table);
-	echo "<br>Table created";
+	//echo "<br>Table created";
 
 }catch ( PDOException $ex ) {
 
