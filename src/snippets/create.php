@@ -1,9 +1,5 @@
-<?php $pageTitle = "Create Task"; ?>
-
-<?php include_once 'partials/header.php'; ?>
-
 <div class="container-fluid">
-    <section class="col .col-xs-12 .col-sm-6 .col-md-8 col-lg-6 white">
+    <section class="col .col-xs-12 .col-sm-6 .col-md-8 col-lg-6">
         <h3 class="text-primary">Create a new task </h3><hr>
         <form action="" method="post">
             <div class="form-group">
@@ -24,5 +20,3 @@
         </form>
     </section>
 </div>
-
-<?php include_once 'partials/footer.php'; ?>
