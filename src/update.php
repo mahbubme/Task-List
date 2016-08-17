@@ -14,10 +14,14 @@
 			$statement = $conn->prepare( $updateQuery );
 			$statement->execute( array( ":name" => $name, ":id" => $id ) );
 
-			if ( $statement ) {
+			if ( $statement->rowCount() === 1 ) {
 
 				echo "Task name update successfully";
 
+			}else{
+
+				echo "No changes made";
+				
 			}
 
 		}catch ( PDOException $ex ){
@@ -39,10 +43,14 @@
 			$statement = $conn->prepare( $updateQuery );
 			$statement->execute( array( ":description" => $description, ":id" => $id ) );
 
-			if ( $statement ) {
+			if ( $statement->rowCount() === 1 ) {
 
 				echo "Task description update successfully";
 
+			}else{
+
+				echo "No changes made";
+				
 			}
 
 		}catch ( PDOException $ex ) {
@@ -64,9 +72,13 @@
 			$statement = $conn->prepare( $updateQuery );
 			$statement->execute( array( ":status" => $status, ":id" => $id ) );
 
-			if ( $statement ) {
+			if ( $statement->rowCount() === 1 ) {
 
 				echo "Task status update successfully";
+
+			}else{
+
+				echo "No changes made";
 
 			}
 
