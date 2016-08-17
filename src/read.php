@@ -17,7 +17,7 @@ try{
         $output .= "<td title='Click to edit'><div class='editable' onclick='makeElementEditable(this)' onblur=\"updateTaskDescription(this, '{$task->id}')\"> $task->description </div> </td>";
         $output .= "<td title='Click to edit'><div class='editable' onclick='makeElementEditable(this)' onblur=\"updateTaskStatus(this, '{$task->id}')\"> $task->status </div> </td>";
         $output .= "<td> $create_date </td>";
-        $output .= "<td style='width: 5%;'><button><i class='btn-danger fa fa-times'></i></button>";
+        $output .= "<td style='width: 5%;'><button class='btn-danger' onclick=\"deleteTask('{$task->id}')\"><i class='fa fa-times'></i></button>";
         $output .= "</td>";
         $output .= "</tr>";
 
