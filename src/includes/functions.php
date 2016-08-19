@@ -100,7 +100,70 @@ function show_errors( $form_errors_array ) {
 	}
 
 	$errors .= "</ul></p>";
-	
-}		
+
+	return $errors;
+
+}	
+
+/**
+ * @param $message, the text for display as error message
+ * @return return the message 
+ */
+function flashMessage( $message, $passOrFail = "Fail" ) {
+
+	if ( $passOrFail === "Pass" ) {
+
+		$data = "<p>{$message}</p>";
+
+	}else{
+
+		$data = "<p>{$message}</p>";
+
+	}
+
+	return $data;
+
+}	
+
+/**
+ * @param $page, the page name which will be the destination page
+ */
+function redirectTo( $page ) {
+
+	header( "Location: {$page}.php" );
+
+}
+
+/**
+ * @param $table, database table name
+ * $column_name, database column name
+ * $value, the field data which need to check
+ * $db, database connection variable
+ * @return return true or false
+ */
+function checkDuplicateEntries( $table, $column_name, $value, $db ) {
+
+	try{
+
+		$sqlQuery = "SELECT * FROM ".$table." WHERE ".$column_name."=:$column_name";
+
+		$statement = $db->prepare( $sqlQuery );
+		$statement->execute( array( ":$column_name" => $value ) );
+
+		if ( $row = $statement->fetch() ) {
+
+			return true;
+		
+		}
+
+		return false;
+
+	}catch ( PDOException $ex ) {
+
+		// handle exception
+
+	}
+
+}
 
 ?>
