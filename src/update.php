@@ -1,6 +1,6 @@
 <?php 
 
-	include_once 'database.php';
+	include_once 'includes/database.php';
 
 	if ( isset( $_POST['name']) && isset( $_POST['id'] )  ) {
 

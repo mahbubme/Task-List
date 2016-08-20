@@ -1,6 +1,6 @@
 <?php 
 
-include_once 'database.php';
+include_once 'includes/database.php';
 
 $table = "CREATE TABLE IF NOT EXISTS tasks
 		  (

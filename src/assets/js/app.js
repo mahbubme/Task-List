@@ -130,3 +130,10 @@ function deleteTask(taskId) {
 	return false;
 
 }
+
+// add active class to current page menu item
+var url = window.location;
+
+$('ul.nav.navbar-nav a').filter( function(){
+	return this.href == url;
+}).parent().addClass('active');

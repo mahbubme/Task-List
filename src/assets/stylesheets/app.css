@@ -10379,4 +10379,22 @@ body {
   background-color: lightyellow;
   background-size: 100%; }
 
+.btn:not(.btn-raised),
+.btn:not(.btn-raised).btn-default,
+.input-group-btn .btn:not(.btn-raised),
+.input-group-btn .btn:not(.btn-raised).btn-default {
+  color: #ffffff;
+  background-color: #5cb85c;
+  border-color: #5cb85c; }
+
+.btn:not(.btn-raised):not(.btn-link):hover,
+.btn:not(.btn-raised):not(.btn-link):focus,
+.input-group-btn .btn:not(.btn-raised):not(.btn-link):hover,
+.input-group-btn .btn:not(.btn-raised):not(.btn-link):focus {
+  background-color: #449d44;
+  border-color: #449d44; }
+
+.page-link {
+  margin-top: 20px; }
+
 /*# sourceMappingURL=app.css.map */
