@@ -166,4 +166,113 @@ function checkDuplicateEntries( $table, $column_name, $value, $db ) {
 
 }
 
+/**
+ * @param $user_id
+ */
+
+function rememberMe( $user_id ) {
+
+	$encryptCookieData = base64_encode( "UaQteh5i4y3dntstemYODEC{$user_id}" );
+	// Cookie set to expire in about 30 days
+	setcookie( "rememberUserCookie", $encryptCookieData, time()+60*60*24*100, "/" );
+
+}
+
+/** 
+ * checked if the cookie used is same with the encrypted cookie
+ * @param $db, database connection link
+ * @return bool, true if the user cookie is valid
+ */
+
+function isCookieValid( $db ) {
+
+	$isValid = false;
+
+	if ( isset( $_COOKIE['rememberUserCookie']) ) {
+
+		/**
+		 * Decode cookies and extract user ID
+		 */
+		$decryptCookieData = base64_decode( $_COOKIE['rememberUserCookie'] );
+		$user_id = explode( "UaQteh5i4y3dntstemYODEC", $decryptCookieData );
+		$userID = $user_id[1];
+
+		/**
+		 * check if id retrieved from the cookie exist in the database
+		 */
+		$sqlQuery = "SELECT * FROM users WHERE id = :id";
+		$statement = $db->prepare($sqlQuery);
+		$statement->execute( array( ':id' => $userID) );
+
+		if ( $row = $statement->fetch() ) {
+
+			$id = $row['id'];
+			$username = $row['username'];
+
+			/**
+			 * Create the user session variable
+			 */
+			$_SESSION['id'] = $id;
+			$_SESSION['username'] = $username;
+			$isValid = true;
+
+		}else {
+			/**
+			 * cookie ID is invalid destroy session and logout user
+			 */
+			$isValid = false;
+			signout();
+		}
+
+	}
+
+	return $isValid;
+}
+
+/** 
+ * signout the user if the cookie is not valid
+ */
+
+function signout() {
+
+	unset( $_SESSION['username'] );
+	unset( $_SESSION['id'] );
+
+	if ( isset( $_COOKIE['rememberUserCookie'] ) ) {
+		unset($_COOKIE['rememberUserCookie']);
+		setcookie('rememberUserCookie', null, -1, '/' );
+	}
+
+	session_destroy();
+	session_regenerate_id( true );
+	redirectTo( 'index' );
+
+}
+
+function guard() {
+
+	$isValid = true;
+	$inactive = 60*2; // 2 mins
+	$fingerprint = md5( $_SERVER['REMOTE_ADDR'] . $_SERVER['HTTP_USER_AGENT'] );
+
+	if( ( isset( $_SESSION['fingerprint'] ) && $_SESSION['fingerprint'] != $fingerprint ) ) {
+
+		$isValid = false;
+		signout();
+
+	}else if ( ( isset( $_SESSION['last_active'] ) && ( time() - $_SESSION['last_active'] ) > $inactive ) && $_SESSION['username'] ) {
+
+		$isValid = false;
+		signout();
+
+	}else {
+
+		$_SESSION['last_active'] = time();
+
+	}
+
+	return $isValid;
+
+}
+
 ?>
