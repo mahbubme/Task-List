@@ -249,10 +249,13 @@ function signout() {
 
 }
 
+/** 
+ * signout the user after 10 mintues automatically
+ */
 function guard() {
 
 	$isValid = true;
-	$inactive = 60*2; // 2 mins
+	$inactive = 60*10; // 10 mins
 	$fingerprint = md5( $_SERVER['REMOTE_ADDR'] . $_SERVER['HTTP_USER_AGENT'] );
 
 	if( ( isset( $_SESSION['fingerprint'] ) && $_SESSION['fingerprint'] != $fingerprint ) ) {
@@ -272,6 +275,33 @@ function guard() {
 	}
 
 	return $isValid;
+
+}
+
+/** 
+ * check the image is valid according to the given extension type
+ */
+function isValidImage( $file ) {
+
+	$form_errors = array();
+
+	$part = explode( ".", $file );
+	$extension = end( $part );
+
+	switch( strtolower( $extension ) ) {
+
+		case 'jpg':
+		case 'gif':
+		case 'bmp':
+		case 'png':
+
+		return $form_errors;
+
+	}
+
+	$form_errors[] = $extension . "is not valid image extension";
+
+	return $form_errors;
 
 }
 

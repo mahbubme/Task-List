@@ -49,8 +49,8 @@
                             <li><a href="profile.php"><i class="fa fa-user"></i>&nbsp; My Profile</a></li>
                             <li><a href="logout.php"><i class="fa fa-sign-out"></i>&nbsp; Logout</a></li>
                         <?php else: ?>
-                            <li><a href="about.php"></i>&nbsp; About</a></li>
-                            <li><a href="contact.php"></i>&nbsp; Contact</a></li>
+                            <!-- <li><a href="about.php"></i>&nbsp; About</a></li>
+                            <li><a href="contact.php"></i>&nbsp; Contact</a></li> -->
                             <li><a href="signup.php"><i class="fa fa-user"></i>&nbsp; Sign Up</a></li>
                             <li><a href="login.php"><i class="fa fa-sign-in"></i>&nbsp; Login</a></li>
                         <?php endif; ?>
