@@ -28,40 +28,49 @@
 				$id = $row['id'];
 				$hashed_password = $row['password'];
 				$username = $row['username'];
+				$activated = $row['activated'];
 
-				if ( password_verify( $password, $hashed_password ) ) {
+				if ( $activated === "0" ) {
 
-					$_SESSION['id'] = $id;
-					$_SESSION['username'] = $username;
-
-					$fingerprint = md5( $_SERVER['REMOTE_ADDR'] . $_SERVER['HTTP_USER_AGENT'] );
-					$_SESSION['last_active'] = time();
-					$_SESSION['fingerprint'] = $fingerprint;
-
-					if ( $remember === "yes" ) {
-						rememberMe($id);
-					}
-					
-					// call sweet alert
-					echo $welcome = "<script type=\"text/javascript\">
-									swal({   
-										title: \"Welcome back $username!\",   
-										text: \"You're being logged in.\",   
-										type: 'success',
-										timer: 3000,   
-										showConfirmButton: false 
-									});
-
-									setTimeout( function() {
-										window.location.href = 'index.php';
-									}, 2000);
-								</script>";
-
-					//redirectTo( 'index' );
+					$result = flashMessage( "Please activate your account" );
 
 				}else {
 
-					$result = flashMessage( "Invalid username or password" );
+					if ( password_verify( $password, $hashed_password ) ) {
+
+						$_SESSION['id'] = $id;
+						$_SESSION['username'] = $username;
+
+						$fingerprint = md5( $_SERVER['REMOTE_ADDR'] . $_SERVER['HTTP_USER_AGENT'] );
+						$_SESSION['last_active'] = time();
+						$_SESSION['fingerprint'] = $fingerprint;
+
+						if ( $remember === "yes" ) {
+							rememberMe($id);
+						}
+						
+						// call sweet alert
+						echo $welcome = "<script type=\"text/javascript\">
+										swal({   
+											title: \"Welcome back $username!\",   
+											text: \"You're being logged in.\",   
+											type: 'success',
+											timer: 3000,   
+											showConfirmButton: false 
+										});
+
+										setTimeout( function() {
+											window.location.href = 'index.php';
+										}, 2000);
+									</script>";
+
+						//redirectTo( 'index' );
+
+					}else {
+
+						$result = flashMessage( "Invalid username or password" );
+
+					}
 
 				}
 

@@ -53,14 +53,50 @@
 
 				if ( $statement->rowCount() == 1 ) {
 
-					$result = "<script type=\"text/javascript\">
-									swal({   
-										title: \"Congratulations $username!\",   
-										text: \"Registration Completed Successfully.\",   
+					// get the last inserted id
+					$user_id = $conn->lastInsertId();
+
+					//encode the id
+					$encode_id = base64_encode( "encodeuserid{$user_id}" );
+
+					$to = $email;
+					$admin_email = "mail@example.com";
+					$subject = "Verify your email address";
+
+					// prepare email body
+					$mail_body = '<html>
+						              <body>
+						                  <h2>User Authentication: Code A Secured Login System</h2>
+						                  <p>Dear '.$username.' <br><br> Thank you for registering, please click on the link below to confirm your email address</p>
+						                  <p><a href="http://localhost/Task-List/src/activate.php?id='.$encode_id.'">Confirm Email</a></p>
+						                  <p><strong>&copy;2016 Task List</strong></p>
+						              </body>
+								  </html>';
+
+					$headers  = "MIME-VERSION: 1.0" . "\r\n";
+					$headers .= "Content-type:text/html;charset=UTF-8" . "\r\n";
+					$headers .= "From: <$admin_email>" . "\r\n"; 
+
+					// error handling for mail
+					if ( mail( $to, $subject, $mail_body, $headers ) ) {
+						
+						$result = "<script type=\"text/javascript\">
+									swal({
+										title: \"Congratulations $username\",
+										text: \"Registration Completed Successfully. Please check your email for confirmation link\",
 										type: 'success',
 										confirmButtonText: \"Thank You!\"
 									});
-								</script>";	
+								   </script>";
+
+					}
+					else {
+
+						$result = "<script type=\"text/javascript\">
+									swal(\"Error\",\"Email sending failed\", \"error\");
+								   </script>";
+						
+					}
 
 				}
 
@@ -84,6 +120,30 @@
 			}
 
 
+		}
+
+	}
+	else if ( isset( $_GET['id'] ) ) {
+
+		$encode_id = $_GET['id'];
+		$decode_id = base64_decode( $encode_id );
+		$user_id_array = explode( "encodeuserid", $decode_id );
+		$id = $user_id_array[1];
+
+		$sql = "UPDATE users SET activated =:activated WHERE id=:id AND activated='0'";
+
+		$statement = $conn->prepare( $sql );
+		$statement->execute( array( ':activated' => "1", ':id' => $id ) );
+
+		if ( $statement->rowCount() == 1 ) {
+
+			$result = '<h2>Email Confirmed</h2>
+					   <p>Your email address has been verified, you can now <a href="login.php">login</a> with your email and password.</p>
+					  ';
+
+		}else {
+
+			$result = "<p class='lead'>No changes made please contact site admin, if you have not confirmed your email before.</p>";
 		}
 
 	}	
