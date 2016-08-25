@@ -66,7 +66,7 @@
 					// prepare email body
 					$mail_body = '<html>
 						              <body>
-						                  <h2>User Authentication: Code A Secured Login System</h2>
+						                  <h2>Task List: Code A Secured Login System</h2>
 						                  <p>Dear '.$username.' <br><br> Thank you for registering, please click on the link below to confirm your email address</p>
 						                  <p><a href="http://localhost/Task-List/src/activate.php?id='.$encode_id.'">Confirm Email</a></p>
 						                  <p><strong>&copy;2016 Task List</strong></p>

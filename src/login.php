@@ -24,7 +24,7 @@
 					    </label>
 					</div>
 					<div class="form-group clearfix">
-						<p class="pull-left page-link"><a href="forgot_password.php">Forgot Password?</a> | <a href="signup.php"> Register </a></p>
+						<p class="pull-left page-link"><a href="password_recovery_link.php">Forgot Password?</a> | <a href="signup.php"> Register </a></p>
 						<button type="submit" class="btn btn-default pull-right" name="loginBtn">Login</button>
 					</div>
 				</form>
