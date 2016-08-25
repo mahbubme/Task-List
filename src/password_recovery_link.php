@@ -16,6 +16,7 @@
 						<input type="email" class="form-control" id="email" name="email" placeholder="Email">
 					</div>
 					<div class="form-group clearfix">
+						<input type="hidden" name="token" value="<?php if ( function_exists( '_token' ) ) echo _token(); ?>">
 						<button type="submit" class="btn btn-default pull-right" name="passwordRecoveryBtn">Recover Password</button>	
 					</div>
 				</form>

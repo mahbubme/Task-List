@@ -24,6 +24,7 @@
 					</div>
 					<div class="form-group clearfix">
 						<p class="pull-left page-link">Already have an account? <a href="login.php">Login</a></p>
+						<input type="hidden" name="token" value="<?php if ( function_exists( '_token' ) ) echo _token(); ?>">
 						<button type="submit" class="btn btn-default pull-right" name="signupBtn">Sign up</button>
 					</div>
 				</form>

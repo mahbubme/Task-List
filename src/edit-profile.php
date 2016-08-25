@@ -51,6 +51,7 @@
                             <div class="col-sm-12">
                                 <p class="pull-left page-link"><a href="profile.php"><i class="fa fa-eye-slash"></i> View Profile</a></p>
                                 <input type="hidden" name="hidden_id" value="<?php if( isset( $id ) ) echo $id; ?>">
+                                <input type="hidden" name="token" value="<?php if ( function_exists( '_token' ) ) echo _token(); ?>">
                                 <button type="submit" class="btn btn-default pull-right" name="updateProfileBtn">Update Profile</button>  
                             </div>  
                         </div>

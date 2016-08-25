@@ -1,128 +1,139 @@
 <?php 
 	
 	// process the form
-	if ( isset( $_POST['signupBtn'] ) ) {
+	if ( isset( $_POST['signupBtn'], $_POST['token'] ) ) {
 
-		// initialize an array to store any error message from the form
-		$form_errors = array();
+		if ( validate_token( $_POST['token'] ) ) {
+			// initialize an array to store any error message from the form
+			$form_errors = array();
 
-		// form validation
-		$required_fields = array( 'email', 'username', 'password' );
+			// form validation
+			$required_fields = array( 'email', 'username', 'password' );
 
-		// call the function to check empty field and merge the return data into form_error array
-		$form_errors = array_merge( $form_errors, check_empty_fields( $required_fields ) );
+			// call the function to check empty field and merge the return data into form_error array
+			$form_errors = array_merge( $form_errors, check_empty_fields( $required_fields ) );
 
-		// fields that requires checking for minimum length
-		$fields_to_check_length = array( 'username' => 4, 'password' => 6 );
+			// fields that requires checking for minimum length
+			$fields_to_check_length = array( 'username' => 4, 'password' => 6 );
 
-		// call the function to check minimum required length and merge the return data ino form_error array
-		$form_errors = array_merge( $form_errors, check_min_length( $fields_to_check_length ) );
+			// call the function to check minimum required length and merge the return data ino form_error array
+			$form_errors = array_merge( $form_errors, check_min_length( $fields_to_check_length ) );
 
-		// email validation / merge the return data into form_error array
-		$form_errors = array_merge( $form_errors, check_email( $_POST ) );
+			// email validation / merge the return data into form_error array
+			$form_errors = array_merge( $form_errors, check_email( $_POST ) );
 
-		// collect form data and store in variables
-		$email = $_POST['email'];
-		$username = $_POST['username'];
-		$password = $_POST['password'];
+			// collect form data and store in variables
+			$email = $_POST['email'];
+			$username = $_POST['username'];
+			$password = $_POST['password'];
 
-		if ( checkDuplicateEntries( "users", "email", $email, $conn ) ) {
+			if ( checkDuplicateEntries( "users", "email", $email, $conn ) ) {
 
-			$result = flashMessage( "Email is already taken, please try another one" );
+				$result = flashMessage( "Email is already taken, please try another one" );
 
-		}
-		else if ( checkDuplicateEntries( "users", "username", $username, $conn ) ) {
+			}
+			else if ( checkDuplicateEntries( "users", "username", $username, $conn ) ) {
 
-			$result = flashMessage( "Username is already taken, please try another one" );
+				$result = flashMessage( "Username is already taken, please try another one" );
 
-		}
+			}
 
-		//check if error array is empty, if yes process form data and insert record
-		else if ( empty( $form_errors ) ) {
+			//check if error array is empty, if yes process form data and insert record
+			else if ( empty( $form_errors ) ) {
 
-			// password hashing
-			$hashed_password = password_hash( $password, PASSWORD_DEFAULT );
+				// password hashing
+				$hashed_password = password_hash( $password, PASSWORD_DEFAULT );
 
-			try{
+				try{
 
-				$sqlInsert = "INSERT INTO users (username, email, password, join_date) 
-							VALUES (:username, :email, :password, now() )";
+					$sqlInsert = "INSERT INTO users (username, email, password, join_date) 
+								VALUES (:username, :email, :password, now() )";
 
-				$statement = $conn->prepare( $sqlInsert );
-				$statement->execute( array( ':username' => $username, ':email' => $email, ':password' => $hashed_password ) );
+					$statement = $conn->prepare( $sqlInsert );
+					$statement->execute( array( ':username' => $username, ':email' => $email, ':password' => $hashed_password ) );
 
-				if ( $statement->rowCount() == 1 ) {
+					if ( $statement->rowCount() == 1 ) {
 
-					// get the last inserted id
-					$user_id = $conn->lastInsertId();
+						// get the last inserted id
+						$user_id = $conn->lastInsertId();
 
-					//encode the id
-					$encode_id = base64_encode( "encodeuserid{$user_id}" );
+						//encode the id
+						$encode_id = base64_encode( "encodeuserid{$user_id}" );
 
-					$to = $email;
-					$admin_email = "mail@example.com";
-					$subject = "Verify your email address";
+						$to = $email;
+						$admin_email = "mail@example.com";
+						$subject = "Verify your email address";
 
-					// prepare email body
-					$mail_body = '<html>
-						              <body>
-						                  <h2>Task List: Code A Secured Login System</h2>
-						                  <p>Dear '.$username.' <br><br> Thank you for registering, please click on the link below to confirm your email address</p>
-						                  <p><a href="http://localhost/Task-List/src/activate.php?id='.$encode_id.'">Confirm Email</a></p>
-						                  <p><strong>&copy;2016 Task List</strong></p>
-						              </body>
-								  </html>';
+						// prepare email body
+						$mail_body = '<html>
+							              <body>
+							                  <h2>Task List: Code A Secured Login System</h2>
+							                  <p>Dear '.$username.' <br><br> Thank you for registering, please click on the link below to confirm your email address</p>
+							                  <p><a href="http://localhost/Task-List/src/activate.php?id='.$encode_id.'">Confirm Email</a></p>
+							                  <p><strong>&copy;2016 Task List</strong></p>
+							              </body>
+									  </html>';
 
-					$headers  = "MIME-VERSION: 1.0" . "\r\n";
-					$headers .= "Content-type:text/html;charset=UTF-8" . "\r\n";
-					$headers .= "From: <$admin_email>" . "\r\n"; 
+						$headers  = "MIME-VERSION: 1.0" . "\r\n";
+						$headers .= "Content-type:text/html;charset=UTF-8" . "\r\n";
+						$headers .= "From: <$admin_email>" . "\r\n"; 
 
-					// error handling for mail
-					if ( mail( $to, $subject, $mail_body, $headers ) ) {
-						
-						$result = "<script type=\"text/javascript\">
-									swal({
-										title: \"Congratulations $username\",
-										text: \"Registration Completed Successfully. Please check your email for confirmation link\",
-										type: 'success',
-										confirmButtonText: \"Thank You!\"
-									});
-								   </script>";
+						// error handling for mail
+						if ( mail( $to, $subject, $mail_body, $headers ) ) {
+							
+							$result = "<script type=\"text/javascript\">
+										swal({
+											title: \"Congratulations $username\",
+											text: \"Registration Completed Successfully. Please check your email for confirmation link\",
+											type: 'success',
+											confirmButtonText: \"Thank You!\"
+										});
+									   </script>";
+
+						}
+						else {
+
+							$result = "<script type=\"text/javascript\">
+										swal(\"Error\",\"Email sending failed\", \"error\");
+									   </script>";
+							
+						}
 
 					}
-					else {
 
-						$result = "<script type=\"text/javascript\">
-									swal(\"Error\",\"Email sending failed\", \"error\");
-								   </script>";
-						
-					}
+				}catch ( PDOException $ex ) {
+
+					$result = flashMessage( "An error occurred: " .$ex->getMessage() );
 
 				}
 
-			}catch ( PDOException $ex ) {
+			}
+			else{
 
-				$result = flashMessage( "An error occurred: " .$ex->getMessage() );
+				if ( count( $form_errors ) == 1 ) {
+
+					$result  = flashMessage( "There was 1 error in the form", "Pass" );
+
+				}else {
+
+					$result = flashMessage( "There were " .count( $form_errors ). " errors in the form" );
+
+				}
+
 
 			}
 
-		}
-		else{
+		}else {
 
-			if ( count( $form_errors ) == 1 ) {
-
-				$result  = flashMessage( "There was 1 error in the form", "Pass" );
-
-			}else {
-
-				$result = flashMessage( "There were " .count( $form_errors ). " errors in the form" );
-
-			}
-
+			// throw an error
+			$result = "<script type='text/javascript'>
+						swal('Error', 'This request originates from an unknown source, possible attack', 'error');
+					   </script>";			
 
 		}
 
 	}
+	// account verification
 	else if ( isset( $_GET['id'] ) ) {
 
 		$encode_id = $_GET['id'];

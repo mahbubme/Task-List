@@ -30,8 +30,9 @@
 						<input type="password" class="form-control" id="confirm_password" name="confirm_password" placeholder="Confirm Password">
 					</div>
 					<div class="form-group clearfix">
-						<input type="hidden" name="user_id" value="<?php if( isset( $id ) ) echo $id; ?>">
 						<p class="pull-left page-link"><a href="login.php">Login</a></p>
+						<input type="hidden" name="user_id" value="<?php if( isset( $id ) ) echo $id; ?>">
+						<input type="hidden" name="token" value="<?php if ( function_exists( '_token' ) ) echo _token(); ?>">
 						<button type="submit" class="btn btn-default pull-right" name="passwordResetBtn">Reset Password</button>	
 					</div>
 				</form>

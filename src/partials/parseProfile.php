@@ -38,73 +38,83 @@
 
 		$encode_id = base64_encode( "encodeuserid{$id}" );
 
-	}else if ( isset( $_POST['updateProfileBtn'] ) ) {
+	}else if ( isset( $_POST['updateProfileBtn'], $_POST['token'] ) ) {
 
-		$form_errors = array();
-		$required_fields = array( 'email', 'username' );
-		$form_errors = array_merge( $form_errors, check_empty_fields( $required_fields ) );
-		$fields_to_check_length = array( 'username' => 4 );
-		$form_errors = array_merge( $form_errors, check_min_length( $fields_to_check_length ) );
-		$form_errors = array_merge( $form_errors, check_email( $_POST ) );
+		if ( validate_token( $_POST['token'] ) ) {
+			
+			$form_errors = array();
+			$required_fields = array( 'email', 'username' );
+			$form_errors = array_merge( $form_errors, check_empty_fields( $required_fields ) );
+			$fields_to_check_length = array( 'username' => 4 );
+			$form_errors = array_merge( $form_errors, check_min_length( $fields_to_check_length ) );
+			$form_errors = array_merge( $form_errors, check_email( $_POST ) );
 
-		// validate if file has a valid extension
-		isset( $_FILES['avatar']['name'] ) ? $avatar = $_FILES['avatar']['name'] : $avatar = null;
+			// validate if file has a valid extension
+			isset( $_FILES['avatar']['name'] ) ? $avatar = $_FILES['avatar']['name'] : $avatar = null;
 
-		if ( $avatar != null ) {
-			$form_errors = array_merge( $form_errors, isValidImage( $avatar ) );
-		}
+			if ( $avatar != null ) {
+				$form_errors = array_merge( $form_errors, isValidImage( $avatar ) );
+			}
 
-		$email = $_POST['email'];
-		$username = $_POST['username'];
-		$hidden_id = $_POST['hidden_id'];
-		$profile_img_temp = $_FILES['avatar']['tmp_name'];
+			$email = $_POST['email'];
+			$username = $_POST['username'];
+			$hidden_id = $_POST['hidden_id'];
+			$profile_img_temp = $_FILES['avatar']['tmp_name'];
 
-		move_uploaded_file( $profile_img_temp, "uploads/".$username.".jpg" );
+			move_uploaded_file( $profile_img_temp, "uploads/".$username.".jpg" );
 
-		if ( empty( $form_errors ) ) {
+			if ( empty( $form_errors ) ) {
 
-			try {
+				try {
 
-				$sqlUpdate = "UPDATE users SET username = :username, email =:email WHERE id =:id";
+					$sqlUpdate = "UPDATE users SET username = :username, email =:email WHERE id =:id";
 
-				$statement = $conn->prepare($sqlUpdate);
-				$statement->execute( array( ':username' => $username, ':email' => $email, ':id' => $hidden_id ) );
+					$statement = $conn->prepare($sqlUpdate);
+					$statement->execute( array( ':username' => $username, ':email' => $email, ':id' => $hidden_id ) );
 
-				if ( $statement->rowCount() == 1 ) {
+					if ( $statement->rowCount() == 1 ) {
 
-					$result = "<script type=\"text/javascript\">
-								swal({   
-										title: \"Updated\",   
-										text: \"Profile Update Successfully\",   
-										type: 'success'
-									});		
-							</script>";
+						$result = "<script type=\"text/javascript\">
+									swal({   
+											title: \"Updated\",   
+											text: \"Profile Update Successfully\",   
+											type: 'success'
+										});		
+								</script>";
 
-				}else {
-					$result = "<script type=\"text/javascript\">
-								swal( \"Nothing Happend!\", \"You have not made any changes.\");		
-							</script>";
+					}else {
+						$result = "<script type=\"text/javascript\">
+									swal( \"Nothing Happend!\", \"You have not made any changes.\");		
+								</script>";
+					}
+
+				}catch ( PDOException $ex ) {
+
+					$result = flashMessage( "An error occurred in : " .$ex->getMessage() );
+
 				}
 
-			}catch ( PDOException $ex ) {
-
-				$result = flashMessage( "An error occurred in : " .$ex->getMessage() );
-
 			}
+			else {
 
-		}
-		else {
+				if ( count( $form_errors ) == 1 ) {
 
-			if ( count( $form_errors ) == 1 ) {
+					$result = flashMessage( "There was 1 error in the form" );
 
-				$result = flashMessage( "There was 1 error in the form" );
+				}else {
 
-			}else {
+					$result = flashMessage( "There were " .count( $form_errors ). " errors in the form." );
 
-				$result = flashMessage( "There were " .count( $form_errors ). " errors in the form." );
+				}
 
-			}
+			}			
 
+		}else {
+
+			// throw an error
+			$result = "<script type='text/javascript'>
+						swal('Error', 'This request originates from an unknown source, possible attack', 'error');
+					   </script>";			
 		}
 
 	}

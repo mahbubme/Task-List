@@ -305,4 +305,26 @@ function isValidImage( $file ) {
 
 }
 
+function _token() {
+
+	$randomToken = base64_encode( openssl_random_pseudo_bytes(32) );
+	//$randomToken = md5( uniqid( rand(), true ) );
+
+	return $_SESSION['token'] = $randomToken;
+}
+
+function validate_token( $requestToken ) {
+
+	if ( isset( $_SESSION['token'] ) && $requestToken === $_SESSION['token'] ) {
+
+		unset( $_SESSION['token'] );
+
+		return true;
+	
+	}
+
+	return false;
+
+}
+
 ?>
