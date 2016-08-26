@@ -10357,7 +10357,8 @@ body {
   background-color: #EEEEEE; }
 
 .white {
-  background-color: #ffffff; }
+  background-color: #ffffff;
+  margin-bottom: 30px; }
 
 .navbar.navbar-default {
   background-color: #009688; }
@@ -10393,6 +10394,19 @@ body {
 .input-group-btn .btn:not(.btn-raised):not(.btn-link):focus {
   background-color: #449d44;
   border-color: #449d44; }
+
+.btn:not(.btn-raised).btn-danger,
+.input-group-btn .btn:not(.btn-raised).btn-danger {
+  color: #ffffff;
+  background-color: #f44336;
+  border-color: #f44336; }
+
+.btn:not(.btn-raised).btn-danger:hover,
+.input-group-btn .btn:not(.btn-raised).btn-danger:focus,
+.btn:not(.btn-raised).btn-danger:active,
+.btn:not(.btn-raised).btn-danger:visited {
+  background-color: rgba(244, 67, 54, 0.8);
+  border-color: rgba(244, 67, 54, 0.8); }
 
 .page-link {
   margin-top: 20px; }

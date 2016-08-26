@@ -3,6 +3,7 @@ body
 
 .white
 	background-color: $white
+	margin-bottom: 30px
 
 .navbar 
 .navbar.navbar-default
@@ -39,6 +40,19 @@ body
 .input-group-btn .btn:not(.btn-raised):not(.btn-link):focus
 	background-color: $btnHover
 	border-color: $btnHover
+
+.btn:not(.btn-raised).btn-danger, 
+.input-group-btn .btn:not(.btn-raised).btn-danger
+	color: $white
+	background-color: $red
+	border-color: $red
+
+.btn:not(.btn-raised).btn-danger:hover, 
+.input-group-btn .btn:not(.btn-raised).btn-danger:focus, 
+.btn:not(.btn-raised).btn-danger:active, 
+.btn:not(.btn-raised).btn-danger:visited
+	background-color: rgba(244, 67, 54, 0.8)
+	border-color: rgba(244, 67, 54, 0.8)
 
 .page-link
 	margin-top: 20px

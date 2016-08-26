@@ -3,6 +3,7 @@
 <?php include_once 'partials/header.php'; ?>
 <?php include_once 'partials/parseProfile.php'; ?>
 <?php include_once 'partials/parseChangePassword.php'; ?>
+<?php include_once 'partials/parseDeactivate.php'; ?>
 
     <div class="container">
         <div class="row">
@@ -58,11 +59,11 @@
                         </div>
                     </form>
                 </div>
-                
+
                 <div class="col .col-xs-12 .col-sm-12 .col-md-12 col-lg-12 main white">
                     <h3 class="text-primary">Password Management</h3><hr>
 
-                    <form class="row" method="post" action="">
+                    <form class="row" method="post" action="" enctype="multipart/form-data">
                         <div class="form-group">
                             <div class="col-sm-2">
                                 <label for="password" class="control-label">Current Password</label>
@@ -95,6 +96,19 @@
                                 <input type="hidden" name="hidden_id" value="<?php if( isset( $id ) ) echo $id; ?>">
                                 <input type="hidden" name="token" value="<?php if ( function_exists( '_token' ) ) echo _token(); ?>">
                                 <button type="submit" class="btn btn-default pull-right" name="changePasswordBtn">Change Password</button>
+                            </div>  
+                        </div>
+                    </form>
+                </div>
+
+                <div class="col .col-xs-12 .col-sm-12 .col-md-12 col-lg-12 main white">
+                    <h3 class="text-primary">Deactivate Account</h3><hr>
+                    <form class="row" method="post" action="" enctype="multipart/form-data">
+                        <div class="form-group clearfix">
+                            <div class="col-sm-12">
+                                <input type="hidden" name="hidden_id" value="<?php if( isset( $id ) ) echo $id; ?>">
+                                <input type="hidden" name="token" value="<?php if ( function_exists( '_token' ) ) echo _token(); ?>">
+                                <button onclick="return confirm('Do you really want to deactivate your account?')" type="submit" class="btn btn-danger btn-block" name="deleteAccountBtn">Deactivate Your Account</button>
                             </div>  
                         </div>
                     </form>
