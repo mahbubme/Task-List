@@ -2,6 +2,7 @@
 
 <?php include_once 'partials/header.php'; ?>
 <?php include_once 'partials/parseProfile.php'; ?>
+<?php include_once 'partials/parseChangePassword.php'; ?>
 
     <div class="container">
         <div class="row">
@@ -52,12 +53,52 @@
                                 <p class="pull-left page-link"><a href="profile.php"><i class="fa fa-eye-slash"></i> View Profile</a></p>
                                 <input type="hidden" name="hidden_id" value="<?php if( isset( $id ) ) echo $id; ?>">
                                 <input type="hidden" name="token" value="<?php if ( function_exists( '_token' ) ) echo _token(); ?>">
-                                <button type="submit" class="btn btn-default pull-right" name="updateProfileBtn">Update Profile</button>  
+                                <button type="submit" class="btn btn-default pull-right" name="updateProfileBtn">Update Profile</button> 
                             </div>  
                         </div>
                     </form>
                 </div>
+                
+                <div class="col .col-xs-12 .col-sm-12 .col-md-12 col-lg-12 main white">
+                    <h3 class="text-primary">Password Management</h3><hr>
 
+                    <form class="row" method="post" action="">
+                        <div class="form-group">
+                            <div class="col-sm-2">
+                                <label for="password" class="control-label">Current Password</label>
+                            </div>
+                            <div class="col-sm-10">
+                                <input type="password" class="form-control" name="current_password" placeholder="Current Password">
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <div class="col-sm-2">
+                                <label for="new_password" class="control-label">New Password</label>
+                            </div>
+                            <div class="col-sm-10">
+                                <input type="password" class="form-control" name="new_password" placeholder="New Password">
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <div class="col-sm-2">
+                                <label for="confirm_password" class="control-label">Confirm New Password</label>
+                            </div>
+                            <div class="col-sm-10">
+                                <input type="password" class="form-control" name="confirm_password" placeholder="Confirm New Password">
+                            </div>
+                        </div>
+
+                        <div class="form-group clearfix">
+                            <div class="col-sm-12">
+                                <input type="hidden" name="hidden_id" value="<?php if( isset( $id ) ) echo $id; ?>">
+                                <input type="hidden" name="token" value="<?php if ( function_exists( '_token' ) ) echo _token(); ?>">
+                                <button type="submit" class="btn btn-default pull-right" name="changePasswordBtn">Change Password</button>
+                            </div>  
+                        </div>
+                    </form>
+                </div>
             <?php endif; ?>
 
         </div>
