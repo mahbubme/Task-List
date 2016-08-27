@@ -327,4 +327,33 @@ function validate_token( $requestToken ) {
 
 }
 
+function preplogin( $id, $username, $remember ) {
+	
+	$_SESSION['id'] = $id;
+	$_SESSION['username'] = $username;
+
+	$fingerprint = md5( $_SERVER['REMOTE_ADDR'] . $_SERVER['HTTP_USER_AGENT'] );
+	$_SESSION['last_active'] = time();
+	$_SESSION['fingerprint'] = $fingerprint;
+
+	if ( $remember === "yes" ) {
+		rememberMe($id);
+	}
+
+	// call sweet alert
+	echo $welcome = "<script type=\"text/javascript\">
+						swal({   
+							title: \"Welcome back $username!\",   
+							text: \"You're being logged in.\",   
+							type: 'success',
+							timer: 3000,   
+							showConfirmButton: false 
+						});
+
+						setTimeout( function() {
+							window.location.href = 'index.php';
+						}, 2000);
+					</script>";
+}
+
 ?>

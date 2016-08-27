@@ -35,37 +35,30 @@
 
 					if ( $activated === "0" ) {
 
-						$result = flashMessage( "Please activate your account" );
+						if ( checkDuplicateEntries( 'trash', 'user_id', $id, $conn ) ) {
 
+							// reactivate the account
+							$conn->exec( "UPDATE users SET activated = '1' WHERE id= $id LIMIT 1" );
+
+							// remove info from trash table
+							$conn->exec( "DELETE FROM trash WHERE user_id = $id LIMIT 1" );
+
+							// login the user
+							preplogin( $id, $username, $remember );
+
+						}
+						else {
+						
+							$result = flashMessage( "Please activate your account" );
+
+						}
+					
 					}else {
 
 						if ( password_verify( $password, $hashed_password ) ) {
 
-							$_SESSION['id'] = $id;
-							$_SESSION['username'] = $username;
-
-							$fingerprint = md5( $_SERVER['REMOTE_ADDR'] . $_SERVER['HTTP_USER_AGENT'] );
-							$_SESSION['last_active'] = time();
-							$_SESSION['fingerprint'] = $fingerprint;
-
-							if ( $remember === "yes" ) {
-								rememberMe($id);
-							}
-							
-							// call sweet alert
-							echo $welcome = "<script type=\"text/javascript\">
-											swal({   
-												title: \"Welcome back $username!\",   
-												text: \"You're being logged in.\",   
-												type: 'success',
-												timer: 3000,   
-												showConfirmButton: false 
-											});
-
-											setTimeout( function() {
-												window.location.href = 'index.php';
-											}, 2000);
-										</script>";
+							// login the user
+							preplogin( $id, $username, $remember );
 
 							//redirectTo( 'index' );
 

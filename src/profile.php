@@ -28,7 +28,11 @@
             	<tr><th>Username: </th><td><?php if( isset( $username ) ) echo $username; ?></td></tr>
             	<tr><th>Email: </th><td><?php if( isset( $email ) ) echo $email; ?></td></tr>
             	<tr><th>Date Joined: </th><td><?php if( isset( $date_joined ) ) echo $date_joined; ?></td></tr>
-            	<tr><th></th><td><a href="edit-profile.php?user_identity=<?php if( isset( $encode_id ) ) echo $encode_id; ?>" class="pull-right"><span class="glyphicon glyphicon-edit"></span>Edit Profile</a></td></tr>
+            	<tr><th></th><td>
+                    <a href="edit-profile.php?user_identity=<?php if( isset( $encode_id ) ) echo $encode_id; ?>"><span class="glyphicon glyphicon-edit"></span> Edit Profile</a> &nbsp; &nbsp;
+                    <a href="change-password.php?user_identity=<?php if( isset( $encode_id ) ) echo $encode_id; ?>"><span class="glyphicon glyphicon-edit"></span> Change Password</a> &nbsp; &nbsp;
+                    <a href="deactivate-account.php?user_identity=<?php if( isset( $encode_id ) ) echo $encode_id; ?>" class="pull-right"><span class="glyphicon glyphicon-trash"></span> Deacitvate Account</a>
+                    </td></tr>
             </table>
         </div> 
 
