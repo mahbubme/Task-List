@@ -1,7 +1,10 @@
 <?php 
 	
 	include_once 'includes/database.php';
+	include_once 'includes/functions.php';
 
+
+	// delete the deactivate user permanently after 14 days
 	try {
 		
 		$sqlQuery = $conn->query( "SELECT user_id FROM trash WHERE deleted_at <= CURRENT_DATE - INTERVAL 14 DAY" );
@@ -37,6 +40,40 @@
 	} catch ( PDOException $ex ) {
 		
 		//$ex->getMessage();
+
+	}
+
+	// delete the non-activated user accounts 3 days after signup
+	try {
+		
+		$query = $conn->query( "SELECT id, username FROM users WHERE join_date <= CURRENT_DATE - INTERVAL 3 DAY  AND activated = '0'" );
+
+		while ( $rs = $query->fetch() ) {
+			
+			$user_id = $rs['id'];
+			$username = $rs['username'];
+
+			// check if a row exit in trash table
+			if ( !checkDuplicateEntries( 'trash', 'user_id', $user_id, $conn ) ) {
+				
+				$user_pic = "uploads/".$username.".jpg";
+
+				if ( file_exists( $user_pic ) ) {
+					
+					unlink( $user_pic );
+
+				}
+
+				$result = $conn->exec( "DELETE FROM users WHERE id= $user_id AND activated = '0' LIMIT 1" );
+				echo "$result Account deleted";
+
+			}
+
+		}
+
+	} catch (PDOException $e) {
+		
+		$ex->getMessage();
 
 	}
 
