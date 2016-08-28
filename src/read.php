@@ -1,10 +1,13 @@
 <?php 
 
+include_once 'includes/session.php';
 include_once 'includes/database.php';
 
 try{
 
-	$readQuery = "SELECT * FROM tasks";
+	$user_id = $_SESSION['id'];
+
+	$readQuery = "SELECT * FROM tasks WHERE user_id = $user_id";
 
 	$statement = $conn->query( $readQuery );
 

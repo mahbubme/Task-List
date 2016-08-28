@@ -29,6 +29,7 @@
 				}
 
 				$conn->exec( "DELETE FROM trash WHERE user_id = $id LIMIT 1" );
+				$conn->exec( "DELETE FROM tasks WHERE user_id = $id" );
 				$result = $conn->exec( "DELETE FROM users WHERE id = $id AND activated = '0' LIMIT 1" );
 
 				//echo "$result Account deleted";
@@ -65,7 +66,7 @@
 				}
 
 				$result = $conn->exec( "DELETE FROM users WHERE id= $user_id AND activated = '0' LIMIT 1" );
-				echo "$result Account deleted";
+				//echo "$result Account deleted";
 
 			}
 
@@ -73,7 +74,7 @@
 
 	} catch (PDOException $e) {
 		
-		$ex->getMessage();
+		//$ex->getMessage();
 
 	}
 

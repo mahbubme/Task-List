@@ -10414,4 +10414,12 @@ body {
 .profile-img {
   margin-bottom: 20px; }
 
+ul.field-errors {
+  margin: 0 0 0 30px;
+  padding: 0;
+  list-style: none; }
+
+ul.field-errors li {
+  list-style-type: circle; }
+
 /*# sourceMappingURL=app.css.map */

@@ -48,10 +48,14 @@
 									$result = "<script>
 												swal({
 													title: \"Operation Successful\",
-													text: \"Your password was updated successfully\",
+													text: \"Your password was updated successfully. Login with new password again.\",
 													type: 'success',
 													confirmButtonText: \"Thank You!\"
 												});	
+
+												setTimeout(function(){
+													window.location.href = 'logout.php';
+												}, 3000);
 											   </script>";
 
 								}

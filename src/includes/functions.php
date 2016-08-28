@@ -90,7 +90,7 @@ function check_email( $data ) {
  */
 function show_errors( $form_errors_array ) {
 
-	$errors  = "<p><ul>";
+	$errors  = "<p><ul class='field-errors'>";
 
 	// loop through error array and display all items in a list
 	foreach( $form_errors_array as $the_error ) {

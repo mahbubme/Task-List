@@ -43,10 +43,10 @@
 		if ( validate_token( $_POST['token'] ) ) {
 			
 			$form_errors = array();
-			$required_fields = array( 'email', 'username' );
+			$required_fields = array( 'email' );
 			$form_errors = array_merge( $form_errors, check_empty_fields( $required_fields ) );
-			$fields_to_check_length = array( 'username' => 4 );
-			$form_errors = array_merge( $form_errors, check_min_length( $fields_to_check_length ) );
+			//$fields_to_check_length = array( 'username' => 4 );
+			//$form_errors = array_merge( $form_errors, check_min_length( $fields_to_check_length ) );
 			$form_errors = array_merge( $form_errors, check_email( $_POST ) );
 
 			// validate if file has a valid extension
@@ -57,7 +57,8 @@
 			}
 
 			$email = $_POST['email'];
-			$username = $_POST['username'];
+			//$username = $_POST['username'];
+			$username = $_SESSION['username'];
 			$hidden_id = $_POST['hidden_id'];
 			$profile_img_temp = $_FILES['avatar']['tmp_name'];
 
@@ -67,10 +68,10 @@
 
 				try {
 
-					$sqlUpdate = "UPDATE users SET username = :username, email =:email WHERE id =:id";
+					$sqlUpdate = "UPDATE users SET email =:email WHERE id =:id";
 
 					$statement = $conn->prepare($sqlUpdate);
-					$statement->execute( array( ':username' => $username, ':email' => $email, ':id' => $hidden_id ) );
+					$statement->execute( array( ':email' => $email, ':id' => $hidden_id ) );
 
 					if ( $statement->rowCount() == 1 ) {
 

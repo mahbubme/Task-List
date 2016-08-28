@@ -63,6 +63,10 @@
 												type: 'success',
 												confirmButtonText: \"Thank You!\"
 											});
+
+											setTimeout(function(){
+												window.location.href = 'logout.php';
+											}, 5000);
 										   </script>";
 
 							}
